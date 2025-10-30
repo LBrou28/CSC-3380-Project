@@ -1,23 +1,10 @@
-import { EXERCISES } from "/modules/exercises.js"
+/*
+	The app, currently only generates workouts
+*/
 
-const $ = (sel) => document.querySelector(sel);
-const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+import { EXERCISES, generateWorkout } from "/modules/exercises.js"
 
-function shuffle(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-
-    return arr;
-}
-
-function formatMMSS(totalSeconds) {
-    const m = Math.floor(totalSeconds / 60).toString().padStart(2, "0");
-    const s = Math.floor(totalSeconds % 60).toString().padStart(2, "0");
-    return `${m}:${s}`;
-}
-
+// exercise generator
 const generateBtn = document.querySelector("#generateBtn");
 const workoutOutput = document.querySelector("#workoutOutput");
 const saveFavoriteBtn = document.querySelector("#saveFavoriteBtn");
@@ -25,32 +12,7 @@ const clearWorkoutBtn = document.querySelector("#clearWorkoutBtn");
 
 let currentWorkout = [];
 
-function generateWorkout() {
-    var workout = [];
-
-    const selected = $$('input[name="group"]:checked').map((element) => element.value);
-    const count = Math.max(1, Math.min(12, parseInt($("#count").value || "6", 10)));
-
-    if (selected.length === 0) {
-        workoutOutput.innerHTML = `Select at least one muscle group.`;
-        workout = [];
-        return;
-    }
-
-    const pool = EXERCISES.filter((exercise) => selected.includes(exercise.group));
-    if (pool.length === 0) {
-        workoutOutput.innerHTML = `No exercises match your selection.`;
-        workout = [];
-        return;
-    }
-
-    const picks = shuffle([...pool]).slice(0, Math.min(count, pool.length));
-    workout = picks;
-
-    return workout;
-}
-
-function renderWorkoutList(workoutList) {
+function renderWorkoutList(workoutList, outputMessage) {
     workoutOutput.innerHTML = "";
     workoutList.forEach((workout, index) => {
         const row = document.createElement("div");
@@ -77,11 +39,17 @@ function renderWorkoutList(workoutList) {
     if (workoutList.length === 0) {
         workoutOutput.innerHTML = `Workout cleared.`;
     }
+    if (outputMessage != null) {
+        workoutOutput.innerHTML = outputMessage;
+    }
 }
 
 generateBtn.addEventListener("click", function() {
-    currentWorkout = generateWorkout();
-    renderWorkoutList(currentWorkout);
+    let output = generateWorkout();
+    let outputMessage = output.outputMessage
+    currentWorkout = output.workout;
+
+    renderWorkoutList(currentWorkout, outputMessage);
 });
 
 clearWorkoutBtn.addEventListener("click", () => {
