@@ -124,7 +124,7 @@ function init() {
     document.addEventListener("keydown", function(event) {
         if (event.key == " ") {
             startPressed();
-        } else if (event.key == "Enter") {
+        } else if (event.key == "Shift") {
             split();
         }
     });
