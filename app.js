@@ -3,7 +3,7 @@
 */
 
 import { EXERCISES, generateWorkout } from "/modules/exercises.js"
-import * as stopwatch from "/modules/stopwatch"
+import * as stopwatch from "/modules/stopwatch.js"
 
 // exercise generator
 const generateBtn = document.querySelector("#generateBtn");
