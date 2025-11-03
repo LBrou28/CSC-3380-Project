@@ -32,6 +32,9 @@ const EXERCISES = [
 	{ name: "Mountain Climbers", group: "Full Body" },
 ];
 
+let currentWorkout = null;
+const workoutOutput = document.querySelector("#workoutOutput");
+
 class WorkoutOutput {
 	constructor(workout, outputMessage) {
 		this.workout = workout;
@@ -39,35 +42,97 @@ class WorkoutOutput {
 	}
 }
 
+class Workout {
+	constructor(exercises, name) {
+		this.exercises = exercises;
+		this.name = name;
+	}
+}
+
 function generateWorkout() {
-    var workout = [];
+    var exercises = [];
 
     const selected = $$('input[name="group"]:checked').map((element) => element.value);
     const count = Math.max(0, parseInt($("#count").value));
 
 	if (count <= 0) {
 	    let outputMessage = `Exercise count must be atleast 1.`;
-        workout = [];
-        return new WorkoutOutput(workout, outputMessage);	
+        exercises = [];
+        return new WorkoutOutput(new Workout(exercises, "Workout"), outputMessage);	
 	}
 
     if (selected.length === 0) {
         let outputMessage = `Select at least one muscle group.`;
-        workout = [];
-        return new WorkoutOutput(workout, outputMessage);
+        exercises = [];
+        return new WorkoutOutput(new Workout(exercises, "Workout"), outputMessage);
     }
 
     const pool = EXERCISES.filter((exercise) => selected.includes(exercise.group));
     if (pool.length === 0) {
         let outputMessage = `No exercises match your selection.`;
-        workout = [];
-        return new WorkoutOutput(workout, outputMessage);
+        exercises = [];
+        return new WorkoutOutput(new Workout(exercises, "Workout"), outputMessage);
     }
 
     const picks = shuffle(pool).slice(0, Math.min(count, pool.length));
-    workout = picks;
+    exercises = picks;
 
-    return new WorkoutOutput(workout, null);
+    return new WorkoutOutput(new Workout(exercises, "New Workout"), null);
 }
 
-export { EXERCISES, generateWorkout }
+function renderWorkout(workout, outputMessage) {
+    workoutOutput.innerHTML = "";
+	
+	const header = document.createElement("div");
+	header.innerHTML = `
+		<div>
+		<br>
+		<strong>Your Workout: </strong><br>
+		<label for="workoutNameBox">Name:</label>
+		<input type="text" id="workoutNameBox" name="workoutNameBox" placeholder="type workout name here" value="${workout.name}"><br>
+		</div>
+	`
+	workoutOutput.appendChild(header);
+
+    workout.exercises.forEach((exercise, index) => {
+        const row = document.createElement("div");
+        row.className = "item";
+        row.innerHTML = `
+            <div>
+            <strong>${index + 1}. ${exercise.name}</strong>
+            <span>${exercise.group}</span>
+            </div>
+            <div class="item-actions">
+            <span>3 sets × 10 reps</span>
+            <button class="btn" data-action="remove">Remove</button>
+            </div>
+        `;
+
+        row.querySelector('[data-action="remove"]').addEventListener("click", () => {
+            currentWorkout.splice(index, 1);
+            renderWorkout(currentWorkout);
+        });
+
+        workoutOutput.appendChild(row);
+    });
+
+	workoutOutput.innerHTML += "<br>"
+
+    if (workout.exercises.length === 0) {
+        workoutOutput.innerHTML = `Workout cleared.`;
+    }
+    if (outputMessage != null) {
+        workoutOutput.innerHTML = outputMessage;
+    }
+}
+
+function setCurrentWorkout(workout, outputMessage) {
+	currentWorkout = workout;
+	renderWorkout(workout, outputMessage);
+}
+
+function getCurrentWorkout() { // Idk
+	return currentWorkout;
+}
+
+export { EXERCISES, Workout, generateWorkout, setCurrentWorkout, getCurrentWorkout }
