@@ -30,7 +30,7 @@ A live server will be needed to run the project.
     Step 3: Run `npx http-server -o` inside the directory
 
     ```
-    git clone https://github.com/LBrou28/CSC-3380-Project
+    git clone -b MVP_Milestone https://github.com/LBrou28/CSC-3380-Project
     cd CSC-3380-Project
     npx http-server -o
     ```
