@@ -2,7 +2,7 @@
 	The app, currently only generates workouts
 */
 
-import { EXERCISES, generateWorkout, setCurrentWorkout } from "/modules/exercises.js"
+import { EXERCISES, Workout, generateWorkout, setCurrentWorkout } from "/modules/exercises.js"
 import * as stopwatch from "/modules/stopwatch.js"
 import * as dataManager from "/modules/dataManager.js"
 
@@ -17,7 +17,7 @@ generateBtn.addEventListener("click", function() {
 });
 
 clearWorkoutBtn.addEventListener("click", () => {
-    setCurrentWorkout([]);
+    setCurrentWorkout(new Workout([], "Workout"));
 });
 
 // stopwatch
