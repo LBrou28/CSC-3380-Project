@@ -4,6 +4,7 @@
 
 import { EXERCISES, generateWorkout } from "/modules/exercises.js"
 import * as stopwatch from "/modules/stopwatch.js"
+import * as dataManager from "/modules/dataManager.js"
 
 // exercise generator
 const generateBtn = document.querySelector("#generateBtn");
@@ -60,3 +61,6 @@ clearWorkoutBtn.addEventListener("click", () => {
 
 // stopwatch
 stopwatch.init();
+
+// data
+dataManager.init();
