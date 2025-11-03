@@ -32,6 +32,9 @@ const EXERCISES = [
 	{ name: "Mountain Climbers", group: "Full Body" },
 ];
 
+let currentWorkout = [];
+const workoutOutput = document.querySelector("#workoutOutput");
+
 class WorkoutOutput {
 	constructor(workout, outputMessage) {
 		this.workout = workout;
@@ -70,4 +73,56 @@ function generateWorkout() {
     return new WorkoutOutput(workout, null);
 }
 
-export { EXERCISES, generateWorkout }
+function renderWorkoutList(workoutList, outputMessage) {
+    workoutOutput.innerHTML = "";
+	
+	const header = `
+		<br>
+		<strong>Your Workout: </strong><br>
+		<label for="workoutNameBox">Name:</label>
+		<input type="text" id="workoutNameBox" name="workoutNameBox" placeholder="type workout name here"><br>
+	`
+	workoutOutput.innerHTML += header;
+
+    workoutList.forEach((workout, index) => {
+        const row = document.createElement("div");
+        row.className = "item";
+        row.innerHTML = `
+            <div>
+            <strong>${index + 1}. ${workout.name}</strong>
+            <span>${workout.group}</span>
+            </div>
+            <div class="item-actions">
+            <span>3 sets × 10 reps</span>
+            <button class="btn" data-action="remove">Remove</button>
+            </div>
+        `;
+
+        row.querySelector('[data-action="remove"]').addEventListener("click", () => {
+            currentWorkout.splice(index, 1);
+            renderWorkoutList(currentWorkout);
+        });
+
+        workoutOutput.appendChild(row);
+    });
+
+	workoutOutput.innerHTML += "<br>"
+
+    if (workoutList.length === 0) {
+        workoutOutput.innerHTML = `Workout cleared.`;
+    }
+    if (outputMessage != null) {
+        workoutOutput.innerHTML = outputMessage;
+    }
+}
+
+function setCurrentWorkout(workout, outputMessage) {
+	currentWorkout = workout;
+	renderWorkoutList(workout, outputMessage);
+}
+
+function getCurrentWorkout() { // Idk
+	return currentWorkout;
+}
+
+export { EXERCISES, generateWorkout, setCurrentWorkout, getCurrentWorkout }
