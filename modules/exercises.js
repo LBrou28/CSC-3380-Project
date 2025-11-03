@@ -77,19 +77,22 @@ function generateWorkout() {
     const picks = shuffle(pool).slice(0, Math.min(count, pool.length));
     exercises = picks;
 
-    return new WorkoutOutput(new Workout(exercises, "Workout"), null);
+    return new WorkoutOutput(new Workout(exercises, "New Workout"), null);
 }
 
 function renderWorkout(workout, outputMessage) {
     workoutOutput.innerHTML = "";
 	
-	const header = `
+	const header = document.createElement("div");
+	header.innerHTML = `
+		<div>
 		<br>
 		<strong>Your Workout: </strong><br>
 		<label for="workoutNameBox">Name:</label>
-		<input type="text" id="workoutNameBox" name="workoutNameBox" placeholder="type workout name here" value=${workout.name}><br>
+		<input type="text" id="workoutNameBox" name="workoutNameBox" placeholder="type workout name here" value="${workout.name}"><br>
+		</div>
 	`
-	workoutOutput.innerHTML += header;
+	workoutOutput.appendChild(header);
 
     workout.exercises.forEach((exercise, index) => {
         const row = document.createElement("div");

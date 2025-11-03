@@ -13,12 +13,12 @@ const saveFavoriteBtn = document.querySelector("#saveFavoriteBtn");
 
 function renderData(savedWorkoutsToRender) {
     savedWorkoutsOutput.innerHTML = "";
-	console.log(savedWorkoutsToRender)
+
     savedWorkoutsToRender.forEach((savedWorkout, index) => {
 		var exercisesText = "";
-		savedWorkout.forEach((exercise, index) => {
+		savedWorkout.exercises.forEach((exercise, index) => {
 			exercisesText += exercise.name
-			if (index < savedWorkout.length - 1) {
+			if (index < savedWorkout.exercises.length - 1) {
 				exercisesText += ", ";
 			}
 		})
@@ -27,13 +27,13 @@ function renderData(savedWorkoutsToRender) {
         row.className = "item";
         row.innerHTML = `
             <div>
-            <strong>${index + 1}}</strong>
-            <span>${exercisesText}<span>
+            <strong>${index + 1}) ${savedWorkout.name}</strong>
+            <p>${exercisesText}<p>
             </div>
             <div class="item-actions">
 			<button class="btn" data-action="load">Load</button>
             <button class="btn" data-action="remove">Remove</button>
-            </div>
+            </div><br>
         `;
 
         row.querySelector('[data-action="remove"]').addEventListener("click", () => {
@@ -87,7 +87,11 @@ function init() {
 	load();
 
 	saveFavoriteBtn.addEventListener("click", function() {
-		saveWorkout(exercises.getCurrentWorkout());
+		// this is fun
+		var input = document.querySelector("#workoutNameBox")
+		let workoutName = input.value.trim();
+		var workout = new exercises.Workout(exercises.getCurrentWorkout().exercises, workoutName)
+		saveWorkout(workout);
 	})
 }
 
