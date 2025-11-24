@@ -1,11 +1,10 @@
 /*
-	Handles loading and saving all data from local storage
-	Handles selecting saved workouts
-	Handles saving current workout
+    handles saving workouts, rendering, and selecting
 */
 
 import {$, $$, shuffle, formatMMSS} from "/modules/utils.js"
-import * as exercises from "/modules/exercises.js"
+import {Workout} from "/modules/core/classes.js"
+import * as workout_generator from "/modules/features/workout_generator.js"
 
 var savedWorkouts = []
 const savedWorkoutsOutput = $("#savedWorkoutsOutput")
@@ -42,7 +41,7 @@ function renderData(savedWorkoutsToRender) {
         });
 
 		row.querySelector('[data-action="load"]').addEventListener("click", () => {
-			exercises.setCurrentWorkout(savedWorkout);
+			workout_generator.setCurrentWorkout(savedWorkout);
         });
 
         savedWorkoutsOutput.appendChild(row);
@@ -54,7 +53,7 @@ function renderData(savedWorkoutsToRender) {
 }
 
 function loadWorkout(workout) {
-	exercises.setCurrentWorkout(workout);
+	workout_generator.setCurrentWorkout(workout);
 }
 
 function saveWorkout(workout) {
@@ -83,16 +82,13 @@ function load() {
 	renderData(data);
 }
 
-function init() {
+export function init() {
 	load();
 
 	saveFavoriteBtn.addEventListener("click", function() {
-		// this is fun
 		var input = document.querySelector("#workoutNameBox")
 		let workoutName = input.value.trim();
-		var workout = new exercises.Workout(exercises.getCurrentWorkout().exercises, workoutName)
+		var workout = new Workout(workout_generator.getCurrentWorkout().exercises, workoutName)
 		saveWorkout(workout);
 	})
 }
-
-export { init, save, load }

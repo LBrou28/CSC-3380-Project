@@ -1,53 +1,13 @@
 /*
-	Exercises and stuff
+    Handles workout generation and rendering the workout generator
 */
 
 import {$, $$, shuffle, formatMMSS} from "/modules/utils.js"
-
-const EXERCISES = [
-	// Chest
-	{ name: "Push-Ups", group: "Chest" },
-
-	// Back
-	{ name: "Pull-Ups", group: "Back" },
-
-	// Legs
-	{ name: "Bodyweight Squat", group: "Legs" },
-	{ name: "Goblet Squat", group: "Legs" },
-
-	// Shoulders
-	{ name: "Overhead Press", group: "Shoulders" },
-	{ name: "Lateral Raise", group: "Shoulders" },
-
-	// Arms
-	{ name: "Bicep Curls", group: "Arms" },
-	{ name: "Triceps Dips", group: "Arms" },
-
-	// Core
-	{ name: "Plank", group: "Core" },
-	{ name: "Russian Twist", group: "Core" },
-
-	// Full Body
-	{ name: "Burpees", group: "Full Body" },
-	{ name: "Mountain Climbers", group: "Full Body" },
-];
+import {Workout, WorkoutOutput} from "/modules/core/classes.js"
+import {EXERCISES} from "/modules/core/exercises_list.js"
 
 let currentWorkout = null;
 const workoutOutput = document.querySelector("#workoutOutput");
-
-class WorkoutOutput {
-	constructor(workout, outputMessage) {
-		this.workout = workout;
-		this.outputMessage = outputMessage;
-	}
-}
-
-class Workout {
-	constructor(exercises, name) {
-		this.exercises = exercises;
-		this.name = name;
-	}
-}
 
 function generateWorkout() {
     var exercises = [];
@@ -126,13 +86,26 @@ function renderWorkout(workout, outputMessage) {
     }
 }
 
-function setCurrentWorkout(workout, outputMessage) {
+export function setCurrentWorkout(workout, outputMessage) {
 	currentWorkout = workout;
 	renderWorkout(workout, outputMessage);
 }
 
-function getCurrentWorkout() { // Idk
+export function getCurrentWorkout() { // Idk
 	return currentWorkout;
 }
 
-export { EXERCISES, Workout, generateWorkout, setCurrentWorkout, getCurrentWorkout }
+export function init() {
+    const generateBtn = document.querySelector("#generateBtn");
+    const clearWorkoutBtn = document.querySelector("#clearWorkoutBtn");
+
+    generateBtn.addEventListener("click", function() {
+        let output = generateWorkout();
+        let outputMessage = output.outputMessage
+        setCurrentWorkout(output.workout, outputMessage)
+    });
+
+    clearWorkoutBtn.addEventListener("click", () => {
+        setCurrentWorkout(new Workout([], "Workout"));
+    });
+}
