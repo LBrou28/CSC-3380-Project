@@ -1,3 +1,6 @@
+/*
+    The stopwatch
+*/ 
 import { $, formatHHMMSSDDD } from "/modules/utils.js";
 
 const startBtn = $("#stopwatchStartBtn");
@@ -117,7 +120,7 @@ function startPressed() {
     }
 }
 
-function init() {
+export function init() {
     startBtn.addEventListener("click", startPressed)
     resetBtn.addEventListener("click", reset)
     splitBtn.addEventListener("click", split)
@@ -130,5 +133,3 @@ function init() {
     });
     renderStopwatch();
 }
-
-export {init}

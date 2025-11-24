@@ -1,27 +1,10 @@
 /*
 	The app, currently only generates workouts
 */
+import * as workout_generator from "/modules/features/workout_generator.js"
+import * as stopwatch from "/modules/features/stopwatch.js"
+import * as saved_workouts from "/modules/features/saved_workouts.js"
 
-import { EXERCISES, Workout, generateWorkout, setCurrentWorkout } from "/modules/exercises.js"
-import * as stopwatch from "/modules/stopwatch.js"
-import * as dataManager from "/modules/dataManager.js"
-
-// exercise generator
-const generateBtn = document.querySelector("#generateBtn");
-const clearWorkoutBtn = document.querySelector("#clearWorkoutBtn");
-
-generateBtn.addEventListener("click", function() {
-    let output = generateWorkout();
-    let outputMessage = output.outputMessage
-    setCurrentWorkout(output.workout, outputMessage)
-});
-
-clearWorkoutBtn.addEventListener("click", () => {
-    setCurrentWorkout(new Workout([], "Workout"));
-});
-
-// stopwatch
-stopwatch.init();
-
-// data
-dataManager.init();
+workout_generator.init()
+stopwatch.init()
+saved_workouts.init()
