@@ -12,7 +12,6 @@ export const EXERCISES = [
     { name: "Pull-Ups", group: "Back" },
     { name: "Barbell Rows", group: "Back" },
     { name: "Cable Rows", group: "Back" },
-    { name: "Pull-Ups", group: "Back" },
     { name: "Lat PullDowns", group: "Back" },
     
 
