@@ -10,55 +10,68 @@
 
     <body>
         <header>
-            <h1>FlexForge</h1>
-            <p class="description">Create randomized workouts for each muscle group!</p>
+            <div class="card">
+                <h1>FlexForge</h1>
+                <p class="description">Create randomized workouts for each muscle group!</p>
+            </div>
         </header>
 
         <main class="container grid">
             <!-- generator -->
+            <div class="card">
             <h2> Pick your muscle groups </h2>
-            <form id="generationForm" class="controls">
-                <div class="muscle-group-checkboxes">
-                    <label><input type="checkbox" name="group" value="Chest"> Chest</label>
-                    <label><input type="checkbox" name="group" value="Back"> Back</label>
-                    <label><input type="checkbox" name="group" value="Legs"> Legs</label>
-                    <label><input type="checkbox" name="group" value="Shoulders"> Shoulders</label>
-                    <label><input type="checkbox" name="group" value="Arms"> Arms</label>
-                    <label><input type="checkbox" name="group" value="Core"> Core</label>
-                    <label><input type="checkbox" name="group" value="Full Body"> Full Body</label>
-                </div>
-
-                <div class="count-row">
-                    <label for="count"># of exercises</label>
-                    <input id="count" type="number" min="1" max="12" value="6" />
-                    <button id="generateBtn" type="button" class="btn primary">Generate Workout</button>
-                </div>
-            </form>
-
-            <div id="workoutOutput" class="list"></div>
-            <div class="row">
-                <button id="saveFavoriteBtn" class="btn">Save This Workout</button>
-                <button id="clearWorkoutBtn" class="btn ghost">Clear</button>
+                <form id="generationForm" class="controls">
+                    <div class="muscle-group-checkboxes">
+                        <label><input type="checkbox" name="group" value="Chest"> Chest</label>
+                        <label><input type="checkbox" name="group" value="Back"> Back</label>
+                        <label><input type="checkbox" name="group" value="Legs"> Legs</label>
+                        <label><input type="checkbox" name="group" value="Shoulders"> Shoulders</label>
+                        <label><input type="checkbox" name="group" value="Arms"> Arms</label>
+                        <label><input type="checkbox" name="group" value="Core"> Core</label>
+                        <label><input type="checkbox" name="group" value="Full Body"> Full Body</label>
+                    </div>
+                    
+                    <div class="count-row">
+                        <label for="count"># of exercises</label>
+                        <input id="count" type="number" min="1" max="12" value="6" />
+                        <button id="generateBtn" type="button" class="btn primary">Generate Workout</button>
+                    </div>
+                </form>
             </div>
+
+            <!-- output from generated -->
+            <div class="card">
+                <div id="workoutOutput" class="list"></div>
+                <div class="row">
+                    <button id="saveFavoriteBtn" class="btn">Save This Workout</button>
+                    <button id="clearWorkoutBtn" class="btn ghost">Clear</button>
+                </div>
+            </div>
+
 
             <!-- stopwatch -->
-            <h2>Stopwatch</h2>
-            <p>Keyboard controls:</p>
-            <ul>
-                <li>Space: Start/pause</li>
-                <li>Shift: Split</li>
-            </ul>
-            <div class="stopwatchButtons">
-                <button id="stopwatchStartBtn">Start</button>
-                <button id="stopwatchSplitBtn">Split</button>
-                <button id="stopwatchResetBtn">Reset</button>
+            <div class="card">
+                <h2>Stopwatch</h2>
+                <p>Keyboard controls:</p>
+                <ul>
+                    <li>Space: Start/pause</li>
+                    <li>Shift: Split</li>
+                </ul>
+                <div class="stopwatchButtons">
+                    <button id="stopwatchStartBtn">Start</button>
+                    <button id="stopwatchSplitBtn">Split</button>
+                    <button id="stopwatchResetBtn">Reset</button>
+                </div>
+                <p id="stopwatchMainTimer">Timer: 20:20:20</p>
+                <div id="splitList"></div>
             </div>
-            <p id="stopwatchMainTimer">Timer: 20:20:20</p>
-            <div id="splitList"></div>
+
 
             <!-- Saved workouts -->
-             <h2>Saved Workouts</h2>
-             <div id="savedWorkoutsOutput"></div>
+            <div class="card">
+                <h2>Saved Workouts</h2>
+                <div id="savedWorkoutsOutput"></div>
+            </div>
         </main>
 
         <script type="module" src="app.js"></script>
