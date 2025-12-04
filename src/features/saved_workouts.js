@@ -2,9 +2,9 @@
     handles saving workouts, rendering, and selecting
 */
 
-import {$, $$, shuffle, formatMMSS} from "/modules/utils.js"
-import {Workout} from "/modules/core/classes.js"
-import * as workout_generator from "/modules/features/workout_generator.js"
+import {$, $$, shuffle, formatMMSS} from "/src/utils.js"
+import {Workout} from "/src/core/classes.js"
+import * as workout_generator from "/src/features/workout_generator.js"
 
 var savedWorkouts = []
 const savedWorkoutsOutput = $("#savedWorkoutsOutput")

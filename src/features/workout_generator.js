@@ -2,9 +2,9 @@
     Handles workout generation and rendering the workout generator
 */
 
-import {$, $$, shuffle, formatMMSS} from "/modules/utils.js"
-import {Workout, WorkoutOutput} from "/modules/core/classes.js"
-import {EXERCISES} from "/modules/core/exercises_list.js"
+import {$, $$, shuffle, formatMMSS} from "/src/utils.js"
+import {Workout, WorkoutOutput} from "/src/core/classes.js"
+import {EXERCISES} from "/src/core/exercises_list.js"
 
 let currentWorkout = null;
 const workoutOutput = document.querySelector("#workoutOutput");
