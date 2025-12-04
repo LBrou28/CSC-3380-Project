@@ -4,6 +4,6 @@
 # ignore node modules
 node_modules/
 
-# parcel
+# ignore parcel outputs
 dist/
 .parcel-cache/

@@ -1,7 +1,7 @@
 /*
     Handles workout generation and rendering the workout generator
 */
-
+import { gsap } from "gsap";
 import {$, $$, shuffle, formatMMSS} from "/src/utils.js"
 import {Workout, WorkoutOutput} from "/src/core/classes.js"
 import {EXERCISES} from "/src/core/exercises_list.js"
@@ -84,6 +84,8 @@ function renderWorkout(workout, outputMessage) {
     if (outputMessage != null) {
         workoutOutput.innerHTML = outputMessage;
     }
+
+    gsap.from(".item", { stagger: 0.25, y: -100, rotation: 100, duration: 1 })
 }
 
 export function setCurrentWorkout(workout, outputMessage) {
