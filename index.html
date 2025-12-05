@@ -82,6 +82,16 @@
                 <h2>Saved Workouts</h2>
                 <div id="savedWorkoutsOutput"></div>
             </div>
+            <div class="card">
+                <h2>Weekly Workout Planner</h2>
+                <p>Assign your saved workouts to specific days of the week.</p>
+                <div id="weeklyPlannerOutput" class="planner-grid"></div>
+                <div class="row">
+                    <button id="downloadPlanText" class="btn">Export as Text</button>
+                    <button id="downloadPlanJSON" class="btn">Export as JSON</button>
+                    <button id="clearWeeklyPlan" class="btn ghost">Clear Plan</button>
+                </div>
+            </div>
         </main>
 
         <script type="module" src="app.js"></script>
