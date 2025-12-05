@@ -9,3 +9,96 @@ body {
     padding: 10px;
     margin: 20px;
 }
+
+.planner-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.day-container {
+    background-color: rgb(70, 65, 65);
+    border: 2px solid rgb(126, 126, 224);
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.day-container h4 {
+    margin: 0 0 10px 0;
+    color: rgb(126, 126, 224);
+    text-align: center;
+}
+
+.workout-display {
+    background-color: rgb(50, 45, 45);
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    min-height: 60px;
+}
+
+.workout-display strong {
+    display: block;
+    margin-bottom: 5px;
+    color: rgb(200, 200, 255);
+}
+
+.workout-display p {
+    margin: 5px 0;
+    font-size: 0.9em;
+}
+
+.day-actions {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.day-actions .btn {
+    flex: 1;
+    min-width: 70px;
+    padding: 5px;
+    font-size: 0.85em;
+}
+
+.muted {
+    color: rgb(150, 150, 150);
+    font-style: italic;
+}
+
+.row {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn {
+    padding: 8px 12px;
+    background-color: rgb(100, 100, 150);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: rgb(120, 120, 170);
+}
+
+.btn.primary {
+    background-color: rgb(126, 126, 224);
+}
+
+.btn.primary:hover {
+    background-color: rgb(150, 150, 240);
+}
+
+.btn.ghost {
+    background-color: transparent;
+    border: 1px solid rgb(100, 100, 150);
+}
+
+.btn.ghost:hover {
+    background-color: rgb(80, 80, 100);
+}
