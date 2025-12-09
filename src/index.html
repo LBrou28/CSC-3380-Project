@@ -50,7 +50,7 @@
 
             <!-- notes -->
             <div class="card">
-                <h2>4) Notes (Weights, Reps, Thoughts)</h2>
+                <h2> Notes (Weights, Reps, Thoughts)</h2>
                 <textarea id="notes" rows="10" placeholder="Example: 10/27/2025 — Bench 3×8 (135 lb), Squat 3×5 (185 lb)..."></textarea>
                 <div class="row">
                 <span class="muted" id="notesStatus">Saved.</span>
@@ -81,6 +81,16 @@
             <div class="card">
                 <h2>Saved Workouts</h2>
                 <div id="savedWorkoutsOutput"></div>
+            </div>
+            <div class="card">
+                <h2>Weekly Workout Planner</h2>
+                <p>Assign your saved workouts to specific days of the week.</p>
+                <div id="weeklyPlannerOutput" class="planner-grid"></div>
+                <div class="row">
+                    <button id="downloadPlanText" class="btn">Export as Text</button>
+                    <button id="downloadPlanJSON" class="btn">Export as JSON</button>
+                    <button id="clearWeeklyPlan" class="btn ghost">Clear Plan</button>
+                </div>
             </div>
         </main>
 
