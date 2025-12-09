@@ -1,7 +1,7 @@
 /*
     Make notes and save them
 */
-import {$} from "/src/utils.js"
+import {$} from "/static/app/js/main/utils.js"
 
 const NOTES_KEY = "flexforge_notes_v1";
 const notesEl = $("#notes");

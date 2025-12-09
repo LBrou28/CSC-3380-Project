@@ -15,7 +15,14 @@ export class Workout {
 	constructor(exercises, name) {
 		this.exercises = exercises;
 		this.name = name;
-	}
+    }
+    
+    removeExercise(index) {
+        console.log(index)
+        console.log(this.exercises)
+        this.exercises.splice(index, 1)
+        console.log(this.exercises)
+    }
 }
 
 /*

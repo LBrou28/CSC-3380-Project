@@ -1,10 +1,9 @@
 /*
     Handles workout generation and rendering the workout generator
 */
-import { gsap } from "gsap";
-import {$, $$, shuffle, formatMMSS} from "/src/utils.js"
-import {Workout, WorkoutOutput} from "/src/core/classes.js"
-import {EXERCISES} from "/src/core/exercises_list.js"
+import {$, $$, shuffle, formatMMSS} from "/static/app/js/main/utils.js"
+import {Workout, WorkoutOutput} from "/static/app/js/main/core/classes.js"
+import {EXERCISES} from "/static/app/js/main/core/exercises_list.js"
 
 let currentWorkout = null;
 const workoutOutput = document.querySelector("#workoutOutput");
@@ -53,7 +52,7 @@ function renderWorkout(workout, outputMessage) {
 		</div>
 	`
 	workoutOutput.appendChild(header);
-
+    console.log(workout.exercises)
     workout.exercises.forEach((exercise, index) => {
         const row = document.createElement("div");
         row.className = "item";
@@ -67,16 +66,18 @@ function renderWorkout(workout, outputMessage) {
             <button class="btn" data-action="remove">Remove</button>
             </div>
         `;
-
-        row.querySelector('[data-action="remove"]').addEventListener("click", () => {
-            currentWorkout.splice(index, 1);
+        
+        var button = row.querySelector('[data-action="remove"]')
+        button.addEventListener("click", () => {
+            console.log("CLICK!!")
+            currentWorkout.removeExercise(index)
             renderWorkout(currentWorkout);
         });
 
         workoutOutput.appendChild(row);
     });
 
-	workoutOutput.innerHTML += "<br>"
+	workoutOutput.appendChild(document.createElement("br"))
 
     if (workout.exercises.length === 0) {
         workoutOutput.innerHTML = `Workout cleared.`;
@@ -84,8 +85,6 @@ function renderWorkout(workout, outputMessage) {
     if (outputMessage != null) {
         workoutOutput.innerHTML = outputMessage;
     }
-
-    gsap.from(".item", { stagger: 0.25, y: -100, rotation: 100, duration: 1 })
 }
 
 export function setCurrentWorkout(workout, outputMessage) {

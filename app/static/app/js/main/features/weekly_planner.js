@@ -2,7 +2,7 @@
     Weekly Planner - Assign saved workouts to specific days of the week
 */
 
-import { $ } from "/modules/utils.js"
+import { $ } from "/static/app/js/main/utils.js"
 
 const PLANNER_KEY = "flexforge_weekly_planner_v1";
 const DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];

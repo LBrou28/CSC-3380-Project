@@ -1,7 +1,7 @@
 /*
     The stopwatch
 */ 
-import { $, formatHHMMSSDDD } from "/src/utils.js";
+import { $, formatHHMMSSDDD } from "/static/app/js/main/utils.js";
 
 const startBtn = $("#stopwatchStartBtn");
 const splitBtn = $("#stopwatchSplitBtn");

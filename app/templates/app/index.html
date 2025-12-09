@@ -1,11 +1,12 @@
+{% load static %}
+
 <!DOCTYPE html>
 
 <html>
     <head>
         <meta charset="utf-8"/>
         <title>FlexForge</title>
-        <link rel="stylesheet" href="styles.css"/>
-        <link rel="manifest" href="/manifest.json"/>
+        <link rel="stylesheet" href="{% static 'app/css/styles.css' %}"/>
     </head>
 
     <body>
@@ -94,6 +95,6 @@
             </div>
         </main>
 
-        <script type="module" src="/src/app.js"></script>
+        <script type="module" src="{% static 'app/js/main/app.js' %}"></script>
     </body>
 </html>
