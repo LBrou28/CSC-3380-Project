@@ -12,6 +12,7 @@
     <body>
         <header>
             <div class="card" id="titleCard">
+                <h4 id="welcome-header"></h4>
                 <h1>FlexForge</h1>
                 <p class="description">Create randomized workouts for each muscle group!</p>
             </div>
@@ -96,5 +97,6 @@
         </main>
 
         <script type="module" src="{% static 'app/js/main/app.js' %}"></script>
+        {{ user|json_script:"user" }}
     </body>
 </html>
