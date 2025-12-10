@@ -33,13 +33,13 @@
                             <h2>Select Your Muscle Groups</h2>
                             <form id="generationForm" class="controls">
                                 <div class="muscle-group-checkboxes">
-                                    <label><input type="checkbox" name="group" value="Chest"> Chest</label>
-                                    <label><input type="checkbox" name="group" value="Back"> Back</label>
-                                    <label><input type="checkbox" name="group" value="Legs"> Legs</label>
-                                    <label><input type="checkbox" name="group" value="Shoulders"> Shoulders</label>
-                                    <label><input type="checkbox" name="group" value="Arms"> Arms</label>
-                                    <label><input type="checkbox" name="group" value="Core"> Core</label>
-                                    <label><input type="checkbox" name="group" value="Full Body"> Full Body</label>
+                                    <label><input type="checkbox" name="group" value="CHEST"> Chest</label>
+                                    <label><input type="checkbox" name="group" value="BACK"> Back</label>
+                                    <label><input type="checkbox" name="group" value="LEGS"> Legs</label>
+                                    <label><input type="checkbox" name="group" value="SHOULDERS"> Shoulders</label>
+                                    <label><input type="checkbox" name="group" value="ARMS"> Arms</label>
+                                    <label><input type="checkbox" name="group" value="CORE"> Core</label>
+                                    <label><input type="checkbox" name="group" value="FULLBODY"> Full Body</label>
                                 </div>
                                 <div class="count-row">
                                     <label for="count"># of exercises</label>
@@ -112,5 +112,7 @@
 
         <script type="module" src="{% static 'app/js/main/app.js' %}"></script>
         {{ user|json_script:"user" }}
+        {{ api_url|json_script:"api_url" }}
+        {{ auth_token|json_script:"auth_token" }}
     </body>
 </html>

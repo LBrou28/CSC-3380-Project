@@ -27,3 +27,30 @@ export function formatHHMMSSDDD(totalSeconds) {
     const d = Math.floor((totalSeconds - Math.floor(totalSeconds)) * 1000).toString().padEnd(3, "0");
     return `${h}:${m}:${s}:${d}`;
 }
+
+export async function call_api(url, method, content) {
+    var result;
+
+    try {
+        const response = await fetch(`${window.API_URL}/${url}`, {
+            method: method,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Token ${window.AUTH_TOKEN}`,
+                "X-CSRFToken": window.CSRF_TOKEN     
+            },
+            body: JSON.stringify(content)
+        })
+        if (!response.ok) {
+            var data = await response.json()
+            console.log(data)
+            throw new Error(`Response status: ${response.status}`);
+        }
+
+        result = await response.json();
+    } catch (error) {
+        console.error(error.message)
+    }
+
+    return result
+}

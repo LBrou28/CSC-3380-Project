@@ -2,22 +2,29 @@
     handles saving workouts, rendering, and selecting
 */
 
-import {$, $$, shuffle, formatMMSS} from "/static/app/js/main/utils.js"
-import {Workout} from "/static/app/js/main/core/classes.js"
+import {$, $$, call_api, shuffle, formatMMSS} from "/static/app/js/main/utils.js"
 import * as workout_generator from "/static/app/js/main/features/workout_generator.js"
 
 var savedWorkouts = []
 const savedWorkoutsOutput = $("#savedWorkoutsOutput")
 const saveFavoriteBtn = document.querySelector("#saveFavoriteBtn");
 
-function renderData(savedWorkoutsToRender) {
+async function rerender() {
+	const saved_workouts = await call_api("saved_workouts", "GET")
+	
     savedWorkoutsOutput.innerHTML = "";
 
-    savedWorkoutsToRender.forEach((savedWorkout, index) => {
+	var processed = 0
+	saved_workouts.forEach((workout) => {
+		if (workout.currently_editing == true) {
+			return
+		}
+
 		var exercisesText = "";
-		savedWorkout.exercises.forEach((exercise, index) => {
-			exercisesText += exercise.name
-			if (index < savedWorkout.exercises.length - 1) {
+		workout.exercises.forEach((exercise, index) => {
+			const base_exercise = exercise.base_exercise
+			exercisesText += base_exercise.name
+			if (index < workout.exercises.length - 1) {
 				exercisesText += ", ";
 			}
 		})
@@ -26,7 +33,7 @@ function renderData(savedWorkoutsToRender) {
         row.className = "item";
         row.innerHTML = `
             <div>
-            <strong>${index + 1}) ${savedWorkout.name}</strong>
+            <strong>${processed + 1}) ${workout.name}</strong>
             <p>${exercisesText}<p>
             </div>
             <div class="item-actions">
@@ -35,60 +42,43 @@ function renderData(savedWorkoutsToRender) {
             </div><br>
         `;
 
-        row.querySelector('[data-action="remove"]').addEventListener("click", () => {
-            savedWorkouts.splice(index, 1);
-            renderData(savedWorkouts);
+		row.querySelector('[data-action="remove"]').addEventListener("click", async () => {
+			await call_api("delete_workout", "DELETE", { workout_id: workout.id })
+			rerender()
         });
 
-		row.querySelector('[data-action="load"]').addEventListener("click", () => {
-			workout_generator.setCurrentWorkout(savedWorkout);
+		row.querySelector('[data-action="load"]').addEventListener("click", async () => {
+			await call_api("load_workout", "POST", { workout_id: workout.id })
+			rerender()
+			workout_generator.rerender()
         });
 
-        savedWorkoutsOutput.appendChild(row);
+		savedWorkoutsOutput.appendChild(row);
+		
+		processed += 1
     });
 
-    if (savedWorkoutsToRender.length === 0) {
+    if (processed === 0) {
         savedWorkoutsOutput.innerHTML = `None`;
     }
 }
 
-function loadWorkout(workout) {
-	workout_generator.setCurrentWorkout(workout);
+async function save_current_workout() {
+	var input = document.querySelector("#workoutNameBox")
+	let workoutName = input.value.trim();
+	
+	const response = await call_api("save_current_workout", "POST", {name: workoutName})
+	rerender()
 }
 
-function saveWorkout(workout) {
-	if (workout.length <= 0) {
-		alert("You can only save non-empty workouts")
-		return
-	}
-	savedWorkouts.push(workout);	
-	renderData(savedWorkouts);
-	save();
-}
-
-function save() {
-	let data = JSON.stringify(savedWorkouts);
-	localStorage.setItem("savedWorkouts", data);
-}
-
-function load() {
-	let data = localStorage.getItem("savedWorkouts")
-	if (data == null) {
-		data = [];
-	} else {
-		data = JSON.parse(data);
-	}
-	savedWorkouts = data;
-	renderData(data);
+function load_workout() {
+	
 }
 
 export function init() {
-	load();
+	rerender()
 
-	saveFavoriteBtn.addEventListener("click", function() {
-		var input = document.querySelector("#workoutNameBox")
-		let workoutName = input.value.trim();
-		var workout = new Workout(workout_generator.getCurrentWorkout().exercises, workoutName)
-		saveWorkout(workout);
+	saveFavoriteBtn.addEventListener("click", async function () {
+		save_current_workout()
 	})
 }

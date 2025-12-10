@@ -1,45 +1,37 @@
 /*
     Handles workout generation and rendering the workout generator
 */
-import {$, $$, shuffle, formatMMSS} from "/static/app/js/main/utils.js"
+import {$, $$, call_api, shuffle, formatMMSS} from "/static/app/js/main/utils.js"
 import {Workout, WorkoutOutput} from "/static/app/js/main/core/classes.js"
 import {EXERCISES} from "/static/app/js/main/core/exercises_list.js"
 
 let currentWorkout = null;
 const workoutOutput = document.querySelector("#workoutOutput");
 
-function generateWorkout() {
-    var exercises = [];
-
-    const selected = $$('input[name="group"]:checked').map((element) => element.value);
+async function generateWorkout() {
+    const muscle_groups = $$('input[name="group"]:checked').map((element) => element.value);
     const count = Math.max(0, parseInt($("#count").value));
 
-	if (count <= 0) {
-	    let outputMessage = `Exercise count must be atleast 1.`;
-        exercises = [];
-        return new WorkoutOutput(new Workout(exercises, "Workout"), outputMessage);	
-	}
-
-    if (selected.length === 0) {
-        let outputMessage = `Select at least one muscle group.`;
-        exercises = [];
-        return new WorkoutOutput(new Workout(exercises, "Workout"), outputMessage);
-    }
-
-    const pool = EXERCISES.filter((exercise) => selected.includes(exercise.group));
-    if (pool.length === 0) {
-        let outputMessage = `No exercises match your selection.`;
-        exercises = [];
-        return new WorkoutOutput(new Workout(exercises, "Workout"), outputMessage);
-    }
-
-    const picks = shuffle(pool).slice(0, Math.min(count, pool.length));
-    exercises = picks;
-
-    return new WorkoutOutput(new Workout(exercises, "New Workout"), null);
+    const response = await call_api("generate_workout", "POST", { muscle_groups: muscle_groups, count: count })
+    rerender()
 }
 
-function renderWorkout(workout, outputMessage) {
+async function clearWorkouts() {
+    const saved_workouts = await call_api("saved_workouts", "GET")
+    var generated_id;
+    saved_workouts.forEach((workout) => {
+        if (workout.currently_editing == true) {
+            generated_id = workout.id
+        }
+    })
+
+    if (generated_id) {
+        const response = await call_api("delete_workout", "DELETE", { workout_id: generated_id })
+        rerender()
+    }
+}
+
+function createWorkoutCard(workout) {
     workoutOutput.innerHTML = "";
 	
 	const header = document.createElement("div");
@@ -52,61 +44,69 @@ function renderWorkout(workout, outputMessage) {
 		</div>
 	`
 	workoutOutput.appendChild(header);
-    console.log(workout.exercises)
+
     workout.exercises.forEach((exercise, index) => {
+        const base_exercise = exercise.base_exercise
+
         const row = document.createElement("div");
         row.className = "item";
         row.innerHTML = `
             <div>
-            <strong>${index + 1}. ${exercise.name}</strong>
-            <span>${exercise.group}</span>
+            <strong>${index + 1}. ${base_exercise.name}</strong>
+            <span>${base_exercise.muscle_group}</span>
             </div>
             <div class="item-actions">
-            <span>3 sets × 10 reps</span>
+            <span>${exercise.sets} sets × ${exercise.reps} reps</span>
             <button class="btn" data-action="remove">Remove</button>
             </div>
         `;
         
         var button = row.querySelector('[data-action="remove"]')
-        button.addEventListener("click", () => {
+        button.addEventListener("click", async () => {
             console.log("CLICK!!")
-            currentWorkout.removeExercise(index)
-            renderWorkout(currentWorkout);
+
+            const response = await call_api("edit_workout_exercises", "DELETE", { exercise_id: exercise.id })
+            rerender()
         });
 
         workoutOutput.appendChild(row);
     });
 
 	workoutOutput.appendChild(document.createElement("br"))
-
-    if (workout.exercises.length === 0) {
-        workoutOutput.innerHTML = `Workout cleared.`;
-    }
-    if (outputMessage != null) {
-        workoutOutput.innerHTML = outputMessage;
-    }
 }
 
-export function setCurrentWorkout(workout, outputMessage) {
-	currentWorkout = workout;
-	renderWorkout(workout, outputMessage);
-}
+/*
+    Includes generated workout
+*/
+export async function rerender() {
+    const saved_workouts = await call_api("saved_workouts", "GET")
+    var generator_workout;
 
-export function getCurrentWorkout() { // Idk
-	return currentWorkout;
+    saved_workouts.forEach((workout) => {
+        if (workout.currently_editing == true) {
+            // Generator Workout
+            generator_workout = workout
+        }
+    })
+
+    if (generator_workout) {
+        createWorkoutCard(generator_workout)
+    } else {
+        workoutOutput.innerHTML = ""
+    }
 }
 
 export function init() {
     const generateBtn = document.querySelector("#generateBtn");
     const clearWorkoutBtn = document.querySelector("#clearWorkoutBtn");
 
-    generateBtn.addEventListener("click", function() {
-        let output = generateWorkout();
-        let outputMessage = output.outputMessage
-        setCurrentWorkout(output.workout, outputMessage)
+    rerender()
+
+    generateBtn.addEventListener("click", async function() {
+        generateWorkout()
     });
 
-    clearWorkoutBtn.addEventListener("click", () => {
-        setCurrentWorkout(new Workout([], "Workout"));
+    clearWorkoutBtn.addEventListener("click", async () => {
+        clearWorkouts()
     });
 }

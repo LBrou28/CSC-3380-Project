@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from rest_framework.authtoken.models import Token
 import json
 
 # Create your views here.
@@ -12,4 +13,6 @@ def app_view(request):
         "email": request.user.email
     }
 
-    return render(request, "app/index.html", {"user": json.dumps(user_data)})
+    token, _ = Token.objects.get_or_create(user=request.user)
+
+    return render(request, "app/index.html", {"user": json.dumps(user_data), "api_url": request.build_absolute_uri("/api"), "auth_token": token.key})

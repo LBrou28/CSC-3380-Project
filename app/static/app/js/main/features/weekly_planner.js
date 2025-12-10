@@ -2,42 +2,44 @@
     Weekly Planner - Assign saved workouts to specific days of the week
 */
 
-import { $ } from "/static/app/js/main/utils.js"
+import { $, call_api } from "/static/app/js/main/utils.js"
 
 const PLANNER_KEY = "flexforge_weekly_planner_v1";
-const DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const DAYS_OF_WEEK = {
+    "MON": "Monday",
+    "TUE": "Tuesday",
+    "WED": "Wednesday",
+    "THU": "Thursday",
+    "FRI": "Friday",
+    "SAT": "Saturday",
+    "SUN": "Sunday"
+};
 
-let weeklyPlan = {};
-
-function initializePlan() {
-    DAYS_OF_WEEK.forEach(day => {
-        if (!weeklyPlan[day]) {
-            weeklyPlan[day] = null;
-        }
-    });
-}
-
-function renderPlanner() {
+async function rerender() {
     const plannerOutput = $("#weeklyPlannerOutput");
     if (!plannerOutput) return;
+
+    const planner_days = await call_api("planner", "GET")
     
     plannerOutput.innerHTML = "";
     
-    DAYS_OF_WEEK.forEach(day => {
+    planner_days.forEach((planner_day) => {
+        const display_day_string = DAYS_OF_WEEK[planner_day.day]
+
         const dayContainer = document.createElement("div");
         dayContainer.className = "day-container";
         
         const dayName = document.createElement("h4");
-        dayName.textContent = day;
+        dayName.textContent = display_day_string;
         dayContainer.appendChild(dayName);
         
         const workoutDisplay = document.createElement("div");
         workoutDisplay.className = "workout-display";
         
-        if (weeklyPlan[day]) {
-            const workout = weeklyPlan[day];
+        const workout = planner_day.workout
+        if (workout) {
             const exercisesText = workout.exercises
-                .map(ex => ex.name)
+                .map(exercise => exercise.base_exercise.name)
                 .join(", ");
             
             workoutDisplay.innerHTML = `
@@ -58,17 +60,16 @@ function renderPlanner() {
         assignBtn.className = "btn";
         assignBtn.textContent = "Assign";
         assignBtn.addEventListener("click", () => {
-            showAssignDialog(day);
+            showAssignDialog(planner_day.day);
         });
         buttonContainer.appendChild(assignBtn);
         
         const removeBtn = document.createElement("button");
         removeBtn.className = "btn ghost";
         removeBtn.textContent = "Clear";
-        removeBtn.addEventListener("click", () => {
-            weeklyPlan[day] = null;
-            renderPlanner();
-            savePlan();
+        removeBtn.addEventListener("click", async () => {
+            await call_api("planner", "PUT", {day: planner_day.day, workout_id: null})
+            rerender()
         });
         buttonContainer.appendChild(removeBtn);
         
@@ -77,19 +78,16 @@ function renderPlanner() {
     });
 }
 
-function showAssignDialog(day) {
+async function showAssignDialog(day) {
     // Get saved workouts from localStorage
-    let savedWorkoutsData = localStorage.getItem("savedWorkouts");
     let savedWorkouts = [];
     
-    if (savedWorkoutsData) {
-        try {
-            savedWorkouts = JSON.parse(savedWorkoutsData);
-        } catch (e) {
-            alert("Error loading saved workouts");
-            return;
+    const unfiltered_saved_workouts = await call_api("saved_workouts", "GET")
+    unfiltered_saved_workouts.forEach((workout) => {
+        if (!workout.currently_editing) {
+            savedWorkouts.push(workout)
         }
-    }
+    })
     
     if (savedWorkouts.length === 0) {
         alert("No saved workouts available. Please save a workout first.");
@@ -98,43 +96,32 @@ function showAssignDialog(day) {
     
     // Create a simple selection interface
     let options = savedWorkouts
-        .map((w, i) => `${i + 1}. ${w.name}`)
+        .map((workout, i) => `${i + 1}. ${workout.name}`)
         .join("\n");
     
-    let message = `Select a workout for ${day}:\n\n${options}\n\nEnter the number (or 0 to cancel):`;
+    let message = `Select a workout for ${DAYS_OF_WEEK[day]}:\n\n${options}\n\nEnter the number (or 0 to cancel):`;
     let choice = prompt(message, "");
     
     if (choice === null || choice === "") return;
     
     let index = parseInt(choice) - 1;
     if (index >= 0 && index < savedWorkouts.length) {
-        weeklyPlan[day] = savedWorkouts[index];
-        renderPlanner();
-        savePlan();
+        var selectedWorkout = savedWorkouts[index];
+
+        await call_api("planner", "PUT", {day: day, workout_id: selectedWorkout.id})
+        rerender()
     } else if (choice !== "0") {
         alert("Invalid selection");
     }
 }
 
-function savePlan() {
-    let data = JSON.stringify(weeklyPlan);
-    localStorage.setItem(PLANNER_KEY, data);
-}
-
-function loadPlan() {
-    let data = localStorage.getItem(PLANNER_KEY);
-    if (data) {
-        try {
-            weeklyPlan = JSON.parse(data);
-            initializePlan(); // Ensure all days exist
-        } catch (e) {
-            weeklyPlan = {};
-            initializePlan();
-        }
-    } else {
-        initializePlan();
+async function clearPlan() {
+    for (let day in DAYS_OF_WEEK) {
+        // Awesome 7 Api calls
+        await call_api("planner", "PUT", {day: day, workout_id: null})
     }
-    renderPlanner();
+
+    rerender()
 }
 
 function exportPlanAsText() {
@@ -186,7 +173,7 @@ export function downloadPlanAsJSON() {
 }
 
 export function init() {
-    loadPlan();
+    rerender()
     
     const downloadTxtBtn = $("#downloadPlanText");
     const downloadJsonBtn = $("#downloadPlanJSON");
@@ -201,13 +188,8 @@ export function init() {
     }
     
     if (clearPlanBtn) {
-        clearPlanBtn.addEventListener("click", () => {
-            if (confirm("Clear the entire weekly plan?")) {
-                weeklyPlan = {};
-                initializePlan();
-                renderPlanner();
-                savePlan();
-            }
+        clearPlanBtn.addEventListener("click", async () => {
+            clearPlan()
         });
     }
 }

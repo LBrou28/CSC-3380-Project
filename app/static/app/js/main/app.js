@@ -7,6 +7,21 @@ import * as saved_workouts from "/static/app/js/main/features/saved_workouts.js"
 import * as notes from "/static/app/js/main/features/notes.js"
 import * as weekly_planner from "/static/app/js/main/features/weekly_planner.js"
 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie) {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 function initTabs() {
 	const navLinks = document.querySelectorAll('.nav-link');
 	const panels = document.querySelectorAll('.tab-panel');
@@ -34,6 +49,14 @@ function initTabs() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+	const data = JSON.parse(document.getElementById("api_url").textContent)
+	window.API_URL = data
+
+	const auth_token = JSON.parse(document.getElementById("auth_token").textContent)
+	window.AUTH_TOKEN = auth_token
+
+	window.CSRF_TOKEN = getCookie("csrftoken")
+
 	initTabs();
 	workout_generator.init();
 	stopwatch.init();

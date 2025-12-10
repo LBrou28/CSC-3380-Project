@@ -11,14 +11,14 @@ class ExerciseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Exercise
-        fields = ['sets', 'reps', 'base_exercise']
+        fields = ['id', 'sets', 'reps', 'base_exercise']
 
 class WorkoutSerializer(serializers.ModelSerializer):
     exercises = ExerciseSerializer(many=True)
 
     class Meta:
         model = Workout
-        fields = ['name', 'exercises', 'currently_editing']
+        fields = ['id', 'name', 'exercises', 'currently_editing']
 
 class GenerateWorkoutSerializer(serializers.Serializer):
     muscle_groups = serializers.ListField(
@@ -38,6 +38,9 @@ class AddExerciseSerializer(serializers.Serializer):
 
 class RemoveExerciseSerializer(serializers.Serializer):
     exercise_id = serializers.IntegerField(min_value=0)
+
+class SaveCurrentWorkoutSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=500, required=False)    
 
 class UpdateWorkoutSerializer(serializers.Serializer):
     workout_id = serializers.IntegerField(min_value=0)
