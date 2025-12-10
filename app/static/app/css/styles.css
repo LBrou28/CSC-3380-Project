@@ -1,5 +1,6 @@
 body {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: rgb(26, 25, 25);
 }
 
 .card {
@@ -8,6 +9,38 @@ body {
     outline: rgb(126, 126, 224) 6px groove;
     padding: 10px;
     margin: 20px;
+}
+
+#titleCard {
+    text-align: center;
+}
+
+.select-muscle-groups {
+    width: 800px;
+    text-align: center;
+    margin: auto;
+    margin-top: 16px;
+    margin-bottom: 32px;
+}
+
+.generated-workout {
+    width: 400px;
+    margin: auto;
+    text-align: center;
+}
+
+.generated-workout input {
+    width: 90%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #222;
+    color: white;
+    font-size: 16px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 8px;
 }
 
 .planner-grid {
@@ -36,6 +69,9 @@ body {
     margin-bottom: 10px;
     border-radius: 3px;
     min-height: 60px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .workout-display strong {
@@ -161,7 +197,7 @@ header { margin-bottom: 10px; }
 /* Create tab layout (generator + notes + stopwatch) */
 .create-grid {
     display: grid;
-    grid-template-columns: 1fr 380px;
+    grid-template-columns: 1fr;
     gap: 16px;
     align-items: start;
 }
@@ -171,4 +207,162 @@ header { margin-bottom: 10px; }
 
 @media (max-width: 1000px) {
     .create-grid { grid-template-columns: 1fr; }
+}
+
+.top-button {
+    background: linear-gradient(90deg, rgb(40,40,45), rgb(60,60,80));
+    background: transparent;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.top-button:hover {
+    background: rgba(255,255,255,0.04);
+}
+.top-button.active {
+    background: rgba(126,126,224,0.95);
+    color: #0b0b2b;
+}
+
+.top-nav {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;            
+    padding: 0px 20px;
+}
+
+/* Remove list default styles */
+.top-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.top-nav li {
+    margin-left: 15px;
+}
+
+.flexforge-title {
+    color: white;
+}
+
+/* login page */
+.login-title {
+    color: white;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Signup link */
+.login-form {
+    display: flex;
+    flex-direction: column;   /* stack items vertically */
+    align-items: center;      /* center items horizontally */
+    background-color: rgb(53, 49, 49);   /* dark background */
+    color: white;
+    width: 400px;
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+    outline: rgb(126, 126, 224) 6px groove;
+}
+
+.login-form .signup-link {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.login-form .signup-link a {
+    color: #4a6cf7;
+    text-decoration: none;
+}
+
+.login-form .signup-link a:hover {
+    text-decoration: underline;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4a6cf7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #222;
+    color: white;
+    font-size: 16px;
+}
+
+.login-form input::placeholder {
+    color: #aaa;
+}
+
+/* Container for checkbox + forgot password */
+.login-options {
+    display: flex;
+    justify-content: space-between; /* checkbox left, link right */
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+/* Checkbox styling */
+.login-options input[type="checkbox"] {
+    margin-right: 8px;
+    accent-color: #4a6cf7; /* modern colored checkbox (Chrome/Edge/Firefox) */
+}
+
+.remember-me {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;          
+    cursor: pointer; 
+    font-size: 14px;
+    color: #ccc;  
+    line-height: 1;
+}
+
+/* Optional: style the checkbox itself */
+.remember-me input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #4a6cf7; /* modern color for the checkbox */
+    margin: 0;
+    vertical-align: middle;
+}
+
+/* Forgot password link */
+.forgot-password {
+    color: #4a6cf7;
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
 }

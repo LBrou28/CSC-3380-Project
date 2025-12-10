@@ -15,4 +15,4 @@ def app_view(request):
 
     token, _ = Token.objects.get_or_create(user=request.user)
 
-    return render(request, "app/index.html", {"user": json.dumps(user_data), "api_url": request.build_absolute_uri("/api"), "auth_token": token.key})
+    return render(request, "app/index.html", {"api_url": request.build_absolute_uri("/api"), "auth_token": token.key})

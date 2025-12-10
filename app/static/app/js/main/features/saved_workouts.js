@@ -51,6 +51,7 @@ async function rerender() {
 			await call_api("load_workout", "POST", { workout_id: workout.id })
 			rerender()
 			workout_generator.rerender()
+			alert("Loaded workout!", "");
         });
 
 		savedWorkoutsOutput.appendChild(row);
@@ -65,14 +66,17 @@ async function rerender() {
 
 async function save_current_workout() {
 	var input = document.querySelector("#workoutNameBox")
+
+	if (!input) {
+		return;
+	}
+
 	let workoutName = input.value.trim();
 	
 	const response = await call_api("save_current_workout", "POST", {name: workoutName})
 	rerender()
-}
 
-function load_workout() {
-	
+    alert("Saved workout!", "");
 }
 
 export function init() {

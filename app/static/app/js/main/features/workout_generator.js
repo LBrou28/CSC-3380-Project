@@ -39,7 +39,6 @@ function createWorkoutCard(workout) {
 		<div>
 		<br>
 		<strong>Your Workout: </strong><br>
-		<label for="workoutNameBox">Name:</label>
 		<input type="text" id="workoutNameBox" name="workoutNameBox" placeholder="type workout name here" value="${workout.name}"><br>
 		</div>
 	`
@@ -66,6 +65,11 @@ function createWorkoutCard(workout) {
             console.log("CLICK!!")
 
             const response = await call_api("edit_workout_exercises", "DELETE", { exercise_id: exercise.id })
+
+            if (workout.exercises.length == 1) {
+                clearWorkouts()
+            }
+
             rerender()
         });
 
@@ -92,7 +96,7 @@ export async function rerender() {
     if (generator_workout) {
         createWorkoutCard(generator_workout)
     } else {
-        workoutOutput.innerHTML = ""
+        workoutOutput.innerHTML = "No exercises"
     }
 }
 

@@ -1,0 +1,33 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>FlexForge</title>
+        <link rel="stylesheet" href="{% static 'app/css/styles.css' %}"/>
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+        <nav class="top-nav main-top-nav">
+            <div class="nav-left">
+                <ul>
+                    <h1 class="flexforge-title">FlexForge</h1>
+                </ul>
+            </div>
+
+            <div class="nav-right">
+                <ul>
+                    {% if user.is_authenticated%}
+                        <li><a href="{% url 'account_logout' %}" class="top-button">Sign Out</a></li>
+                    {% else %}
+                        <!-- <li><a href="{% url 'account_login' %}" class="top-button">Sign In</a></li> -->
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+        {% block content %}{% endblock %}
+        {% block footer %}{% endblock %}
+    </body>
+</html>
