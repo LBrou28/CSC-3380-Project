@@ -141,6 +141,8 @@ body {
 
 /* Top navigation and tabs */
 .top-nav {
+    display: flex;
+    justify-content: center;
     background: linear-gradient(90deg, rgb(40,40,45), rgb(60,60,80));
     padding: 8px 12px;
     border-bottom: 2px solid rgba(126,126,224,0.15);
@@ -365,4 +367,24 @@ header { margin-bottom: 10px; }
 
 .forgot-password:hover {
     text-decoration: underline;
+}
+
+.video-link:active {
+    color: purple; 
+}
+
+.video-link:link {
+    color: rgb(177, 177, 255);
+}
+
+.video-link:visited {
+    color: rgb(142, 142, 255);
+}
+
+.video-link:hover {
+    color: #00ffff;
+}
+
+.video-link:active {
+    color: rgb(116, 116, 235);
 }

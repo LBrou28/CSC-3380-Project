@@ -24,6 +24,7 @@ class BaseExercise(models.Model):
     name = models.CharField(max_length=500)
     muscle_group = models.CharField(max_length=200, choices=MUSCLE_GROUPS, default="CHEST")
     description = models.TextField()
+    video = models.CharField(max_length=500, default="")
 
     def __str__(self):
         return self.name

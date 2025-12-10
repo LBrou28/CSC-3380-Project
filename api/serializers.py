@@ -4,7 +4,7 @@ from .models import Planner, PlannerDay, BaseExercise, Exercise, Workout
 class BaseExerciseSerializer(serializers.ModelSerializer):
     class Meta:
         model = BaseExercise
-        fields = ['id', 'name', 'description', 'muscle_group']
+        fields = ['id', 'name', 'description', 'muscle_group', 'video']
 
 class ExerciseSerializer(serializers.ModelSerializer):
     base_exercise = BaseExerciseSerializer()

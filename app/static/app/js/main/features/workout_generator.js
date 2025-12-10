@@ -47,11 +47,16 @@ function createWorkoutCard(workout) {
     workout.exercises.forEach((exercise, index) => {
         const base_exercise = exercise.base_exercise
 
+        var title_element = base_exercise.name
+        if (base_exercise.video != "") {
+            title_element = `<a target="_blank" class="video-link" href=${base_exercise.video}>${base_exercise.name}</a>`
+        }
+
         const row = document.createElement("div");
         row.className = "item";
         row.innerHTML = `
             <div>
-            <strong>${index + 1}. ${base_exercise.name}</strong>
+            <strong>${index + 1}. ${title_element}</strong>
             <span>${base_exercise.muscle_group}</span>
             </div>
             <div class="item-actions">
