@@ -9,28 +9,34 @@ Luke Broussard, Phong Huong, Michael Brennan, Alex Nguyen, Gabriel Kominas
 Our website, FlexForge, is a workout tool that streamlines the process of finding a workout regiment. FlexForge generates workouts for the user based on the target muscle groups that the user selects.
 
 ## How to run:
-A live server will be needed to run the project.
 
-- #### Option 1: VS Code
-    Step 0: Install the ['Live Server'](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension in VS Code
+#### Step 1: Clone the repository
+```
+git clone https://github.com/LBrou28/CSC-3380-Project
+cd CSC-3380-Project
+```
 
-    Step 1: Clone the repository
-    
-    Step 2: Open it in VS Code
+#### Step 2: Initialize the Python virtual environment
+```
+python -m venv .venv
+.venv/Scripts/activate.ps1 # if on powershell
+.venv/Scripts/activate.bat # if on terminal
+```
 
-    Step 3: Click the 'Go Live" button at the bottom right
+#### Step 3: Download dependencies
+```
+pip install -r requirements.txt
+```
 
-- #### Option 2: npx http-server
-    Step 0: Install [Node.js](https://nodejs.org/en/download)
+#### Step 4: Initialize database
+```
+python manage.py migrate
+python manage.py update_exercises
+```
 
-    Step 1: Clone the repository
+#### Step 5: Start the server
+```
+python manage.py runserver
+```
 
-    Step 2: Navigate to the folder of the cloned repository
-
-    Step 3: Run `npx http-server -o` inside the directory
-
-    ```
-    git clone https://github.com/LBrou28/CSC-3380-Project
-    cd CSC-3380-Project
-    npx http-server -o
-    ```
+The project should then be accessible at `localhost:8000/`
