@@ -9,6 +9,16 @@ body {
     outline: rgb(126, 126, 224) 6px groove;
     padding: 10px;
     margin: 20px;
+    border-radius: 6px;
+}
+
+.track-grid .card {
+    width: 300px;
+}
+
+.track-grid {
+    display: flex;
+    flex-direction: row;
 }
 
 #titleCard {
