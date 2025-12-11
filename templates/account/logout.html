@@ -1,0 +1,15 @@
+{% extends "allauth/layouts/base.html" %}
+
+{% block content %}
+<div class="logout-container">
+    <h2>Sign Out</h2>
+    <p>Are you sure you want to log out?</p>
+
+    <form method="POST" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        <button type="submit">Sign Out</button>
+    </form>
+
+    <a class="logout-cancel" href="/">Cancel</a>
+</div>
+{% endblock %}

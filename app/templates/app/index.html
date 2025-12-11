@@ -1,0 +1,114 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+<header>
+    <div class="card" id="titleCard">
+        <h4 id="welcome-header"></h4>
+        <h1>FlexForge</h1>
+        <p class="description">Create Your Own Personalized Workout Routine</p>
+    </div>
+</header>
+
+<nav class="top-nav">
+    <ul class="nav-list">
+        <li><button class="nav-link" data-tab="create">Create</button></li>
+        <li><button class="nav-link" data-tab="saved-planner">Plan</button></li>
+        <li><button class="nav-link" data-tab="track-progress">Track</button></li>
+    </ul>
+</nav>
+
+<main class="container grid">
+    <section class="tab-panel" data-tab="create">
+        <div class="create-grid">
+            <div class="center-column">
+                <div class="card select-muscle-groups">
+                    <h2>Select Your Muscle Groups</h2>
+                    <form id="generationForm" class="controls">
+                        <div class="muscle-group-checkboxes">
+                            <label><input type="checkbox" name="group" value="CHEST"> Chest</label>
+                            <label><input type="checkbox" name="group" value="BACK"> Back</label>
+                            <label><input type="checkbox" name="group" value="LEGS"> Legs</label>
+                            <label><input type="checkbox" name="group" value="SHOULDERS"> Shoulders</label>
+                            <label><input type="checkbox" name="group" value="ARMS"> Arms</label>
+                            <label><input type="checkbox" name="group" value="CORE"> Core</label>
+                            <label><input type="checkbox" name="group" value="FULLBODY"> Full Body</label>
+                        </div>
+                        <div class="count-row">
+                            <label for="count"># of exercises</label>
+                            <input id="count" type="number" min="1" max="12" value="6" />
+                            <button id="generateBtn" type="button" class="btn primary">Generate Workout</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card generated-workout">
+                    <h2>Generated Workout</h2>
+                    <div id="workoutOutput" class="list"></div>
+                    <div class="row">
+                        <button id="saveFavoriteBtn" class="btn">Save This Workout</button>
+                        <button id="clearWorkoutBtn" class="btn ghost">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="tab-panel" data-tab="saved-planner">
+        <div class="saved-planner-grid">
+            <div class="card saved-column">
+                <h2 class="section-title">Saved Workouts</h2>
+                    <div id="savedWorkoutsOutput"></div>
+            </div>
+
+            <div class="card planner-column">
+                <h2 class="section-title">Weekly Workout Planner</h2>
+                <p class="muted">Assign your saved workouts to specific days of the week.</p>
+                <div id="weeklyPlannerOutput" class="planner-grid"></div>
+                <div class="row">
+                    <button id="downloadPlanText" class="btn">Export as Text</button>
+                    <button id="downloadPlanJSON" class="btn">Export as JSON</button>
+                    <button id="clearWeeklyPlan" class="btn ghost">Clear Plan</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="tab-panel" data-tab="track-progress">
+        <div class="track-grid">
+            <div class="right-column">
+                <div class="card">
+                    <h2>Track Your Progress</h2>
+                    <textarea id="notes" rows="8" placeholder="Example: 10/27/2025 — Bench 3×8 (135 lb), Squat 3×5 (185 lb)..."></textarea>
+                    <div class="row">
+                        <span class="muted" id="notesStatus">Saved.</span>
+                        <button id="downloadNotes" class="btn">Download Notes</button>
+                        <button id="clearNotes" class="btn ghost">Clear</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Stopwatch</h2>
+                    <p>Keyboard controls:</p>
+                    <ul>
+                        <li>Space: Start/pause</li>
+                        <li>Shift: Split</li>
+                    </ul>
+                    <div class="stopwatchButtons">
+                        <button id="stopwatchStartBtn">Start</button>
+                        <button id="stopwatchSplitBtn">Split</button>
+                        <button id="stopwatchResetBtn">Reset</button>
+                    </div>
+                    <p id="stopwatchMainTimer">Timer: 20:20:20</p>
+                    <div id="splitList"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script type="module" src="{% static 'app/js/main/app.js' %}"></script>
+{{ api_url|json_script:"api_url" }}
+{{ auth_token|json_script:"auth_token" }}
+
+{% endblock %}
