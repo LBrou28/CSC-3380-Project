@@ -1,0 +1,23 @@
+{% extends "allauth/layouts/base.html" %}
+
+{% block content %}
+<div class="signup-container">
+    <form method="POST" action="{% url 'account_signup' %}" class="signup-form">
+        {% csrf_token %}
+
+        <h2>Create Account</h2>
+
+        {{ form.username }}
+        {{ form.email }}
+        {{ form.password1 }}
+        {{ form.password2 }}
+
+        <button type="submit">Sign Up</button>
+
+        <p class="login-redirect">
+            Already have an account?
+            <a href="{% url 'account_login' %}">Sign In</a>
+        </p>
+    </form>
+</div>
+{% endblock %}

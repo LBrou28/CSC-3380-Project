@@ -265,14 +265,15 @@ header { margin-bottom: 10px; }
     justify-content: center;
     align-items: center;
     font-family: 'Segoe UI', sans-serif;
+    margin-top: 24px;
 }
 
-/* Signup link */
+
 .login-form {
     display: flex;
-    flex-direction: column;   /* stack items vertically */
-    align-items: center;      /* center items horizontally */
-    background-color: rgb(53, 49, 49);   /* dark background */
+    flex-direction: column;  
+    align-items: center;     
+    background-color: rgb(53, 49, 49);  
     color: white;
     width: 400px;
     padding: 40px;
@@ -326,7 +327,7 @@ header { margin-bottom: 10px; }
 /* Container for checkbox + forgot password */
 .login-options {
     display: flex;
-    justify-content: space-between; /* checkbox left, link right */
+    justify-content: space-between; 
     align-items: center;
     width: 100%;
     margin-bottom: 20px;
@@ -337,7 +338,7 @@ header { margin-bottom: 10px; }
 /* Checkbox styling */
 .login-options input[type="checkbox"] {
     margin-right: 8px;
-    accent-color: #4a6cf7; /* modern colored checkbox (Chrome/Edge/Firefox) */
+    accent-color: #4a6cf7; 
 }
 
 .remember-me {
@@ -350,11 +351,10 @@ header { margin-bottom: 10px; }
     line-height: 1;
 }
 
-/* Optional: style the checkbox itself */
 .remember-me input[type="checkbox"] {
     width: 16px;
     height: 16px;
-    accent-color: #4a6cf7; /* modern color for the checkbox */
+    accent-color: #4a6cf7; 
     margin: 0;
     vertical-align: middle;
 }
@@ -387,4 +387,131 @@ header { margin-bottom: 10px; }
 
 .video-link:active {
     color: rgb(116, 116, 235);
+}
+
+/* Sign-out link */
+.logout-container {
+    display: flex;
+    flex-direction: column;   
+    align-items: center;      
+    background-color: rgb(53, 49, 49);  
+    color: white;
+    width: 400px;
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+    outline: rgb(126, 126, 224) 6px groove;
+    margin: auto;
+    margin-top: 24px;
+}
+
+.logout-container .logout-cancel {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.logout-container .logout-cancel {
+    color: #4a6cf7;
+    text-decoration: none;
+}
+
+.logout-container .logout-cancel:hover {
+    text-decoration: underline;
+}
+
+.logout-container button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4a6cf7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.logout-container input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #222;
+    color: white;
+    font-size: 16px;
+}
+
+.logout-container input::placeholder {
+    color: #aaa;
+}
+
+/* signup page */
+.login-title {
+    color: white;
+}
+
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+    margin-top: 24px;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;  
+    align-items: center;     
+    background-color: rgb(53, 49, 49);  
+    color: white;
+    width: 400px;
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+    outline: rgb(126, 126, 224) 6px groove;
+}
+
+.signup-form .login-redirect {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.signup-form .login-redirect a {
+    color: #4a6cf7;
+    text-decoration: none;
+}
+
+.signup-form .login-redirect a:hover {
+    text-decoration: underline;
+}
+
+.signup-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4a6cf7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.signup-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #222;
+    color: white;
+    font-size: 16px;
+}
+
+.signup-form input::placeholder {
+    color: #aaa;
 }
