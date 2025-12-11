@@ -5,6 +5,11 @@
 export const $ = (sel) => document.querySelector(sel);
 export const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 
+/**
+ * Shuffles an array
+ * @param {Array} arr - The array to shuffle 
+ * @returns The shuffled array
+ */
 export function shuffle(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -14,12 +19,22 @@ export function shuffle(arr) {
     return arr;
 }
 
+/**
+ * Format seconds to hh:mm:ss
+ * @param {number} totalSeconds 
+ * @returns The formatted time string
+ */
 export function formatMMSS(totalSeconds) {
     const m = Math.floor(totalSeconds / 60).toString().padStart(2, "0");
     const s = Math.floor(totalSeconds % 60).toString().padStart(2, "0");
     return `${m}:${s}`;
 }
 
+/**
+ * Format seconds to hh:mm:ss:uuu
+ * @param {number} totalSeconds 
+ * @returns The formatted time string
+ */
 export function formatHHMMSSDDD(totalSeconds) {
     const h = Math.floor(totalSeconds / 60 / 60).toString().padStart(2, "0");
     const m = Math.floor(totalSeconds / 60).toString().padStart(2, "0");
@@ -28,6 +43,13 @@ export function formatHHMMSSDDD(totalSeconds) {
     return `${h}:${m}:${s}:${d}`;
 }
 
+/**
+ * Makes an api call to a url
+ * @param {String} url - The url of the api endpoint
+ * @param {String} method - The method for the request. 
+ * @param {*} [content] - The body content being sent to the api
+ * @returns The parsed JSON object from the api call
+ */
 export async function call_api(url, method, content) {
     var result;
 

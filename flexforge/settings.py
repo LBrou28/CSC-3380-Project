@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'drf_spectacular'
 ]
 
 MIDDLEWARE = [
@@ -135,3 +136,15 @@ AUTHENTICATION_BACKENDS = [
 SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 LOGIN_REDIRECT_URL = '/'
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'FlexForge API',
+    'DESCRIPTION': 'API for FlexForge. The workout generator app.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}

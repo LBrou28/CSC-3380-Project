@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 from .models import *
 from .serializers import *
 from random import choice
@@ -15,20 +16,11 @@ import random
 class BaseExercisesList(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        description="Get all base exercises",
+        responses=BaseExerciseSerializer(many=True),
+    )
     def get(self, request, format=None):
-        """
-            GET api/saved_workouts
-            Gets the complete list of base exercises in the form of:
-            [
-                {
-                    "id": id of the base exercise
-                    "name": the name
-                    "description": description of the base exercise, currently placeholder
-                    "muscle_group": muscle group of the base exercise
-                }
-                ...
-            ]
-        """
         base_exercises = BaseExercise.objects.all()
         serializer = BaseExerciseSerializer(base_exercises, many=True)
         return Response(serializer.data)
@@ -36,31 +28,11 @@ class BaseExercisesList(APIView):
 class SavedWorkoutsList(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        description="Get all saved workouts for the user",
+        responses=WorkoutSerializer(many=True),
+    )
     def get(self, request, format=None):
-        """
-            GET api/get_base_exercises
-            Gets a list of saved workouts in the form of:
-            [
-                {
-                    "name": workout name
-                    "currently_editing": is the workout being edited? (in the generator area)
-                    "exercises": [
-                        {
-                            "sets": amount of sets for the exercise
-                            "reps": amount of reps for the exercise
-                            "base_exercise": {
-                                "id": id of the base exercise
-                                "name": the name
-                                "description": description of the base exercise, currently placeholder
-                                "muscle_group": muscle group of the base exercise
-                            }
-                        }
-                        ...
-                    ]
-                }
-                ...
-            ]
-        """
         workouts = Workout.objects.filter(user=request.user)
         serializer = WorkoutSerializer(workouts, many=True)
         return Response(serializer.data)
@@ -120,14 +92,12 @@ class GenerateWorkout(APIView):
 
         return workout
 
+    @extend_schema(
+        description="Generate a workout given muscle groups and a count",
+        request=GenerateWorkoutSerializer,
+        responses=WorkoutSerializer,
+    )
     def post(self, request, format=None):
-        """
-            POST api/generate_workout
-            {
-                "muscle_groups": List of muscle groups to choose from
-                "count": amount of exercises to generate (between 1-6)
-            }
-        """
         serializer = GenerateWorkoutSerializer(data=request.data)
         if serializer.is_valid():
             # Delete old generated workouts
@@ -146,13 +116,12 @@ class GenerateWorkout(APIView):
 class SaveCurrentWorkout(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        description="Save the current workout",
+        request=SaveCurrentWorkoutSerializer,
+        responses=WorkoutSerializer,
+    )
     def post(self, request, format=None):
-        """ 
-            POST api/save_current_workout
-            {
-                name: name of the workout
-            }
-        """
         serializer = SaveCurrentWorkoutSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -178,13 +147,12 @@ class SaveCurrentWorkout(APIView):
 class LoadWorkout(APIView):
     permission_classes = [IsAuthenticated]
     
+    @extend_schema(
+        description="Load a workout from the user's saved workouts",
+        request=WorkoutIdSerializer,
+        responses=WorkoutSerializer,
+    )
     def post(self, request, format=None):
-        """
-            POST api/load_workout
-            {
-                "workout_id": Id of the workout to load
-            }
-        """
         serializer = WorkoutIdSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -214,13 +182,12 @@ class LoadWorkout(APIView):
 class DeleteWorkout(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        description="Delete a workout from the user's saved workouts",
+        request=WorkoutIdSerializer,
+        responses={200: OpenApiResponse(description="Successfully deleted workout")},
+    )
     def delete(self, request, format=None):
-        """
-            DELETE api/delete_workout
-            {
-                "workout_id": Id of the workout to delete
-            }
-        """
         serializer = WorkoutIdSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -238,17 +205,12 @@ class DeleteWorkout(APIView):
 class WorkoutExercisesEdit(APIView):
     permission_classes = [IsAuthenticated]
 
-    # Add exercise to workout
+    @extend_schema(
+        description="Add an exercise to a workout",
+        request=AddExerciseSerializer,
+        responses=ExerciseSerializer
+    )
     def post(self, request, format=None):
-        """
-            POST api/edit_workout_exercises
-            {
-                "workout_id": Id of the workout to add to
-                "base_exercise_id": Id of the base exercise 
-                "sets": amount of sets
-                "reps": amount of reps
-            }
-        """
         serializer = AddExerciseSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -274,13 +236,12 @@ class WorkoutExercisesEdit(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @extend_schema(
+        description="Delete an exercise fro ma workout",
+        request=RemoveExerciseSerializer,
+        responses={200: OpenApiResponse(description="Exercise deleted!")},
+    )
     def delete(self, request, format=None):
-        """
-            DELETE api/edit_workout_exercises
-            {
-                "exercise_id": Id of the exercise to delete
-            }
-        """
         serializer = RemoveExerciseSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -297,15 +258,12 @@ class WorkoutExercisesEdit(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @extend_schema(
+        description="Edit an exercise's number of reps or sets",
+        request=UpdateExerciseSerializer,
+        responses=ExerciseSerializer,
+    )
     def patch(self, request, format=None):
-        """
-            PATCH api/edit_workout_exercises
-            {
-                "exercise_id": Id of the exercise to patch
-                "reps": New amount of reps
-                "sets": New amount of sets
-            }
-        """
         serializer = UpdateExerciseSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -335,14 +293,12 @@ class WorkoutExercisesEdit(APIView):
 class WorkoutEdit(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        description="Change the properties of a workout",
+        request=UpdateWorkoutSerializer,
+        responses=WorkoutSerializer,
+    )
     def patch(self, request, format=None):
-        """
-            PATCH api/edit_workout
-            {
-                "workout_id": Id of the workout to patch
-                "name": New name of the workoot
-            }
-        """
         serializer = UpdateWorkoutSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -363,43 +319,24 @@ class WorkoutEdit(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)\
 
-def initialize_user(user):
-    if not hasattr(user, 'planner'):
-        planner = Planner.objects.create(user=user)
-        for day_key, day_name in PlannerDay.DAYS_OF_THE_WEEK.items():
-            PlannerDay.objects.create(planner=planner, day=day_name)
-
-@receiver(post_save, sender=User)
-def create_user_data(sender, instance, created, **kwargs):
-    if created:
-        initialize_user(instance)
-
 class PlannerView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        description="Get a list of planner days for the user",
+        responses=PlannerDaySerializer(many=True),
+    )
     def get(self, request, format=None):
-        """
-            GET api/planner
-            Gets planner data in the form of
-            [
-                {
-                    "day": "MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT" | "SUN"
-                    "workout": Workout Object (see SavedWorkoutsList for an example of an object)
-                }
-            ]
-        """
         planner_days = PlannerDay.objects.filter(planner__user=request.user)
         serializer = PlannerDaySerializer(planner_days, many=True)
         return Response(serializer.data)
 
-    def put(self, request, format=None):
-        """
-            PUT api/planner
-            {
-                "day": the day you want to edit
-                "workout_id": the id of the workout to set to
-            }
-        """
+    @extend_schema(
+        description="Change the workout of a planner day",
+        request=SetPlannerSerializer,
+        responses=PlannerDaySerializer,
+    )
+    def patch(self, request, format=None):
         serializer = SetPlannerSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -421,3 +358,16 @@ class PlannerView(APIView):
             return Response(PlannerDaySerializer(planner_day).data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Initialize users with planner data
+def initialize_user(user):
+    if not hasattr(user, 'planner'):
+        planner = Planner.objects.create(user=user)
+        for day_key, day_name in PlannerDay.DAYS_OF_THE_WEEK.items():
+            PlannerDay.objects.create(planner=planner, day=day_name)
+
+@receiver(post_save, sender=User)
+def create_user_data(sender, instance, created, **kwargs):
+    if created:
+        initialize_user(instance)

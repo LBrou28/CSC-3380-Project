@@ -68,7 +68,7 @@ async function rerender() {
         removeBtn.className = "btn ghost";
         removeBtn.textContent = "Clear";
         removeBtn.addEventListener("click", async () => {
-            await call_api("planner", "PUT", {day: planner_day.day, workout_id: null})
+            await call_api("planner", "PATCH", {day: planner_day.day, workout_id: null})
             rerender()
         });
         buttonContainer.appendChild(removeBtn);
@@ -79,7 +79,6 @@ async function rerender() {
 }
 
 async function showAssignDialog(day) {
-    // Get saved workouts from localStorage
     let savedWorkouts = [];
     
     const unfiltered_saved_workouts = await call_api("saved_workouts", "GET")
@@ -108,7 +107,7 @@ async function showAssignDialog(day) {
     if (index >= 0 && index < savedWorkouts.length) {
         var selectedWorkout = savedWorkouts[index];
 
-        await call_api("planner", "PUT", {day: day, workout_id: selectedWorkout.id})
+        await call_api("planner", "PATCH", {day: day, workout_id: selectedWorkout.id})
         rerender()
     } else if (choice !== "0") {
         alert("Invalid selection");
@@ -118,7 +117,7 @@ async function showAssignDialog(day) {
 async function clearPlan() {
     for (let day in DAYS_OF_WEEK) {
         // Awesome 7 Api calls
-        await call_api("planner", "PUT", {day: day, workout_id: null})
+        await call_api("planner", "PATCH", {day: day, workout_id: null})
     }
 
     rerender()
